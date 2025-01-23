@@ -1,4 +1,5 @@
 const express = require("express");
+const returns = require("../routes//returns");
 const users = require("../routes/users");
 const genres = require("../routes/genres");
 const homepage = require("../routes/homepage");
@@ -10,6 +11,7 @@ const error = require("../middleware/error");
 
 module.exports = function (app) {
   app.use(express.json());
+  app.use("/api/returns", returns);
   app.use("/api/movies", movies);
   app.use("/api/genres", genres);
   app.use("/api/customers", customers);
