@@ -1,65 +1,70 @@
 const Joi = require("joi");
 const mongoose = require("mongoose");
 
-const Rental = mongoose.model(
-  "Rental",
-  new mongoose.Schema({
-    customer: {
-      type: new mongoose.Schema({
-        name: {
-          type: String,
-          required: true,
-          minlength: 4,
-          maxlength: 30,
-        },
-        phone: {
-          type: String,
-          minlength: 7,
-          maxlength: 13,
-          required: true,
-        },
-        isGold: {
-          type: Boolean,
-          default: false,
-        },
-      }),
-      required: true,
-    },
+const rentalSchema = new mongoose.Schema({
+  customer: {
+    type: new mongoose.Schema({
+      name: {
+        type: String,
+        required: true,
+        minlength: 4,
+        maxlength: 30,
+      },
+      phone: {
+        type: String,
+        minlength: 7,
+        maxlength: 13,
+        required: true,
+      },
+      isGold: {
+        type: Boolean,
+        default: false,
+      },
+    }),
+    required: true,
+  },
 
-    movie: {
-      type: new mongoose.Schema({
-        title: {
-          type: String,
-          required: true,
-          trim: true,
-          minlength: 4,
-          maxlength: 254,
-        },
-        dailyRentalRate: {
-          type: Number,
-          required: true,
-          min: 0,
-          max: 254,
-        },
-      }),
-      required: true,
-    },
+  movie: {
+    type: new mongoose.Schema({
+      title: {
+        type: String,
+        required: true,
+        trim: true,
+        minlength: 4,
+        maxlength: 254,
+      },
+      dailyRentalRate: {
+        type: Number,
+        required: true,
+        min: 0,
+        max: 254,
+      },
+    }),
+    required: true,
+  },
 
-    dateOut: {
-      type: Date,
-      required: true,
-      default: Date.now,
-    },
+  dateOut: {
+    type: Date,
+    required: true,
+    default: Date.now,
+  },
 
-    dateReturned: {
-      type: Date,
-    },
-    rentalFee: {
-      type: Number,
-      min: 0,
-    },
-  })
-);
+  dateReturned: {
+    type: Date,
+  },
+  rentalFee: {
+    type: Number,
+    min: 0,
+  },
+});
+
+rentalSchema.statics.lookup = function (customerId, movieId) {
+  return this.findOne({
+    "customer._id": customerId,
+    "movie._id": movieId,
+  });
+};
+const Rental = mongoose.model("Rental", rentalSchema);
 
 function validateRental(rental) {
   const schema = Joi.object({
