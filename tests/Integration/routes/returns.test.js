@@ -117,8 +117,6 @@ describe("/api/returns", () => {
 
   it("should return rental if valid request", async () => {
     const res = await exec();
-    const rentalInDb = await Rental.findById(rental._id);
-    console.log(res.body);
     expect(res.body).toHaveProperty("dateOut");
     expect(Object.keys(res.body)).toEqual(
       expect.arrayContaining([
