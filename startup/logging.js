@@ -41,7 +41,6 @@ module.exports = function () {
           if (message instanceof Error) {
             return `${level}: ${message.stack || message.toString()}`;
           }
-          // Otherwise, log normally
           return `${level}: ${message}`;
         })
       ),
