@@ -37,7 +37,13 @@ module.exports = function () {
       format: winston.format.combine(
         winston.format.colorize(),
         winston.format.prettyPrint(),
-        winston.format.printf(({ level, message }) => `${level}: ${message}`)
+        winston.format.printf(({ level, message, stack }) => {
+          if (message instanceof Error) {
+            return `${level}: ${message.stack || message.toString()}`;
+          }
+          // Otherwise, log normally
+          return `${level}: ${message}`;
+        })
       ),
     })
   );
