@@ -8,7 +8,12 @@ module.exports = function () {
     new winston.transports.Console({
       format: winston.format.combine(
         winston.format.colorize(),
-        winston.format.prettyPrint()
+        winston.format.prettyPrint(),
+        winston.format.printf(({ message, stack }) => {
+          return stack
+            ? `Uncaught Exception: ${stack}`
+            : `Uncaught Exception: ${message}`;
+        })
       ),
     })
   );
